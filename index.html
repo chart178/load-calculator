@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Load Profit Calculator for Owner-Operators</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Barlow:wght@500;600;700&display=swap">
 <style>
 :root{
   --bg:#E8E9E6; --card:#FFFFFF; --ink:#1B1F24; --muted:#59616A; --line:#C8CCCB;
@@ -38,6 +38,8 @@ h2{font-size:26px;font-weight:700;margin-bottom:10px}
 .panel{background:var(--card);border:2px solid var(--ink);border-radius:4px;padding:18px;margin-bottom:22px}
 .grid{display:grid;gap:12px}
 .g4{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.g4>div{display:flex;flex-direction:column;justify-content:flex-end}
+.warn{font-size:14px;font-weight:600;color:var(--maybe);background:var(--maybe-bg);border-radius:4px;padding:8px 10px;margin:10px 0 0}
 label{display:block;font-size:14px;color:var(--muted);font-weight:600}
 input,select{width:100%;font:inherit;font-size:18px;padding:10px;margin-top:4px;border:2px solid var(--line);border-radius:4px;background:var(--bg);color:var(--ink)}
 input:focus-visible,button:focus-visible{outline:3px solid var(--maybe);outline-offset:2px}
@@ -59,8 +61,40 @@ button{font:inherit;font-weight:600;padding:10px 16px;border:2px solid var(--ink
 .sub{font-family:"Barlow Condensed","Arial Narrow",sans-serif;font-weight:700;font-size:20px;margin-top:18px}.per td:nth-child(2){text-align:right}.hd td{color:var(--muted);font-size:13px;font-weight:600}
 .wkt td:nth-child(3){text-align:right}.x{margin:0;padding:0;border-width:1px;width:44px;min-height:44px}
 .check{display:flex;align-items:center;gap:8px;margin-top:14px;font-size:16px;color:var(--ink)}.check input{width:28px;height:28px;margin:0}.sum{display:flex;gap:26px;flex-wrap:wrap;margin-top:16px;font-family:"Barlow Condensed","Arial Narrow",Impact,sans-serif;font-size:30px;font-weight:700;line-height:1}.sum small{display:block;margin-top:3px;font-family:"Barlow","Segoe UI",sans-serif;font-size:13px;font-weight:400;color:var(--muted)}
-.tot td{text-align:right}.tot td:first-child{text-align:left}.scroll{overflow-x:auto}.row3{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));align-items:end}.row3 button{margin:0}.check input{min-height:0}
-footer{font-size:13px;color:var(--muted);margin-top:26px}
+.tot td{text-align:right}.tot td:first-child{text-align:left}
+#totals .tot td{text-align:center}#totals .tot td:first-child{text-align:left}
+#triplist .tot td,#explist .tot td{text-align:center}#triplist .tot td:first-child,#triplist .tot td:nth-child(2),#explist .tot td:first-child,#explist .tot td:nth-child(2){text-align:left}.scroll{overflow-x:auto}.row3{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));align-items:end}.row3 button{margin:0}.check input{min-height:0}
+footer{font-size:15px;font-weight:700;color:var(--maybe);background:var(--maybe-bg);border:2px solid var(--maybe);border-radius:4px;padding:12px 14px;margin-top:26px}
+/* trucker theme: road-sign green and safety yellow, big bold type, big tap targets */
+:root{--bg:#DAD8CF;--card:#FFFFFF;--ink:#0D0F10;--muted:#33383C;--line:#8E9296;--sign:#006B3F;--sign-ink:#FFFFFF;--accent:#FFC20E;--accent-ink:#111111;--good:#005F2F;--maybe:#7A4A00;--bad:#A8140C;--good-bg:#CDEBD6;--maybe-bg:#FFE7A3;--bad-bg:#F9C9C4}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0B0D0E;--card:#181C1F;--ink:#FFFFFF;--muted:#C9CED2;--line:#5A6166;--sign:#00A15A;--sign-ink:#FFFFFF;--accent:#FFC20E;--accent-ink:#111111;--good:#4FE08C;--maybe:#FFC94A;--bad:#FF7B70;--good-bg:#0F3A22;--maybe-bg:#3B2D05;--bad-bg:#47140F}}
+body{font:500 19px/1.55 "Barlow","Segoe UI",system-ui,sans-serif}
+header{border-bottom:8px solid var(--accent);padding:26px 0 22px}
+h1{font-weight:800;text-transform:uppercase;letter-spacing:.02em;font-size:clamp(40px,10vw,64px)}
+header p{font-size:20px;font-weight:600;opacity:1}
+h2{font-weight:800;text-transform:uppercase;letter-spacing:.03em;font-size:30px;border-left:10px solid var(--accent);padding-left:12px;margin-bottom:14px}
+.panel,.load{border:3px solid var(--ink);border-radius:6px;padding:20px}
+.panel{box-shadow:0 5px 0 rgba(0,0,0,.35)}
+label{font-size:17px;font-weight:700;color:var(--ink)}
+input,select{font-size:24px;font-weight:700;min-height:60px;border:3px solid var(--ink);border-radius:6px;padding:10px 12px;background:var(--card)}
+input:focus-visible,select:focus-visible,button:focus-visible{outline:4px solid var(--accent);outline-offset:2px}
+.check{font-size:19px;font-weight:700}.check input{accent-color:var(--sign);width:32px;height:32px;min-height:0}
+.hint{font-size:16px;font-weight:500;color:var(--muted)}
+.tag{font-size:34px;font-weight:800;text-transform:uppercase}
+.verdict{font-size:22px;font-weight:800;padding:14px 16px;border:3px solid currentColor}
+.big{font-size:68px;font-weight:800}.big small{font-size:20px;font-weight:700}
+table{font-size:19px}td{padding:9px 0;border-bottom:2px solid var(--line)}
+tr.total td{font-size:22px;font-weight:800;border-top:3px solid var(--ink)}
+.hd td{font-size:15px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--ink)}
+.sub{font-size:26px;font-weight:800;text-transform:uppercase}
+.sum{font-size:38px;font-weight:800}.sum small{font-size:16px;font-weight:600;color:var(--muted)}
+button{font-family:"Barlow Condensed","Arial Narrow",sans-serif;font-size:24px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;background:var(--accent);color:var(--accent-ink);border:3px solid #111;border-radius:6px;min-height:60px;box-shadow:0 4px 0 #111}
+button:active{transform:translateY(3px);box-shadow:0 1px 0 #111}
+.x{background:var(--bad-bg);color:var(--bad);border-color:var(--bad);width:52px;min-height:52px;font-size:22px;box-shadow:none}
+.warn{font-size:17px;font-weight:700;border:2px solid var(--maybe)}
+#totals .tot td:last-child{font-size:22px;font-weight:800}
+footer{font-size:17px}
+.load .grid>div,.row3>div{display:flex;flex-direction:column;justify-content:flex-end}
 </style>
 </head>
 <body>
@@ -105,7 +139,7 @@ footer{font-size:13px;color:var(--muted);margin-top:26px}
 
   <div class="panel" style="margin-top:22px">
     <h2>Totals</h2>
-    <p class="hint" style="margin:0 0 6px">Built from the trips and expenses you save below. Week starts Monday. Trip profit is pay minus fuel, tires and repairs, fixed costs, insurance, and tolls. Your logged expenses are subtracted to get take-home.</p>
+    <p class="hint" style="margin:0 0 6px">Built from the trips and expenses you save below. Week starts Monday. Profit before living expenses is pay minus fuel, tires and repairs, fixed costs, insurance, and tolls. Your logged expenses are subtracted to get take-home.</p>
     <div class="scroll" id="totals"></div>
   </div>
 
@@ -141,15 +175,18 @@ function fmtShow(s){var x=new Date(s+"T00:00:00");return isNaN(x)?esc(s):x.toLoc
 function saveLog(){try{localStorage.setItem("lpctrips",JSON.stringify(trips));localStorage.setItem("lpcexp",JSON.stringify(exps))}catch(e){}}
 function loadLog(){try{var t=JSON.parse(localStorage.getItem("lpctrips")||"[]"),x=JSON.parse(localStorage.getItem("lpcexp")||"[]");if(Array.isArray(t))trips=t;if(Array.isArray(x))exps=x}catch(e){}}
 function saveTrip(i){var r=calc(i);if(!r)return;var nm=$("nm"+i).value.trim();
-  trips.push({d:$("dt"+i).value||today(),n:nm||"Load "+names[i],miles:r.miles,days:r.days,pay:r.pay,net:r.pay-r.fuel-r.maint-r.fixed-r.ins-r.oth});
+  var d=$("dt"+i).value||today(),n=nm||"Load "+names[i];
+  var dup=trips.some(function(t){return t.d===d&&t.n===n&&Math.round(t.miles)===Math.round(r.miles)&&Math.round(t.pay)===Math.round(r.pay)});
+  if(dup&&!confirm("You already saved a trip with this date, name, miles, and pay. Save it again?"))return;
+  trips.push({d:d,n:n,miles:r.miles,days:r.days,pay:r.pay,net:r.pay-r.fuel-r.maint-r.fixed-r.ins-r.oth});
   trips.sort(function(a,b){return a.d<b.d?1:a.d>b.d?-1:0});saveLog();renderLog()}
 function delTrip(k){trips.splice(k,1);saveLog();renderLog()}
 function addExp(){var a=num("xa");if(!(a>0))return;exps.push({d:$("xd").value||today(),c:$("xc").value,a:a});
   exps.sort(function(a,b){return a.d<b.d?1:a.d>b.d?-1:0});$("xa").value="";saveLog();renderLog()}
 function delExp(k){exps.splice(k,1);saveLog();renderLog()}
 function renderLog(){
-  var th=trips.map(function(t,k){return '<tr><td>'+fmtShow(t.d)+'</td><td>'+esc(t.n)+' ('+Math.round(t.miles)+' mi)</td><td>'+money(t.pay)+'</td><td>'+money(t.net)+'</td><td><button type="button" class="x" onclick="delTrip('+k+')" aria-label="Remove trip">x</button></td></tr>'}).join("");
-  $("triplist").innerHTML=trips.length?'<table class="per tot"><tr class="hd"><td>Date</td><td>Trip</td><td>Pay</td><td>Trip profit</td><td></td></tr>'+th+'</table>':'<p class="hint">No trips saved yet.</p>';
+  var th=trips.map(function(t,k){return '<tr><td>'+fmtShow(t.d)+'</td><td>'+esc(t.n)+' ('+Math.round(t.miles).toLocaleString("en-US")+' total mi)</td><td>'+money(t.pay)+'</td><td>'+money(t.net)+'</td><td><button type="button" class="x" onclick="delTrip('+k+')" aria-label="Remove trip">x</button></td></tr>'}).join("");
+  $("triplist").innerHTML=trips.length?'<table class="per tot"><tr class="hd"><td>Date</td><td>Trip</td><td>Pay</td><td>Profit before living expenses</td><td></td></tr>'+th+'</table>':'<p class="hint">No trips saved yet.</p>';
   var eh=exps.map(function(x,k){return '<tr><td>'+fmtShow(x.d)+'</td><td>'+esc(x.c)+'</td><td>'+money2(x.a)+'</td><td><button type="button" class="x" onclick="delExp('+k+')" aria-label="Remove expense">x</button></td></tr>'}).join("");
   $("explist").innerHTML=exps.length?'<table class="per tot"><tr class="hd"><td>Date</td><td>Type</td><td>Amount</td><td></td></tr>'+eh+'</table>':'<p class="hint">No expenses saved yet.</p>';
   var t0=today(),wk0=wkKey(t0),periods=[["Today",function(d){return d===t0}],["This week",function(d){return wkKey(d)===wk0}],["This month",function(d){return d.slice(0,7)===t0.slice(0,7)}],["This year",function(d){return d.slice(0,4)===t0.slice(0,4)}]];
@@ -157,7 +194,7 @@ function renderLog(){
     trips.forEach(function(t){if(p[1](t.d)){n++;pay+=t.pay;net+=t.net}});
     exps.forEach(function(x){if(p[1](x.d))ex+=x.a});
     return '<tr><td>'+p[0]+'</td><td>'+n+'</td><td>'+money(pay)+'</td><td>'+money(net)+'</td><td>'+money(ex)+'</td><td><b>'+money(net-ex)+'</b></td></tr>'}).join("");
-  $("totals").innerHTML='<table class="per tot"><tr class="hd"><td>Period</td><td>Trips</td><td>Pay</td><td>Trip profit</td><td>Expenses</td><td>Take-home</td></tr>'+h+'</table>'}
+  $("totals").innerHTML='<table class="per tot"><tr class="hd"><td>Period</td><td>Trips</td><td>Pay</td><td>Profit before living expenses</td><td>Expenses</td><td>Take-home</td></tr>'+h+'</table><p class="hint">Take-home is based only on the expenses you have logged. Unlogged meals and other costs are not counted.</p>'}
 function $(id){return document.getElementById(id)}
 function num(id){var v=parseFloat($(id).value);return isNaN(v)?0:v}
 function money(n){var s=Math.abs(n).toLocaleString("en-US",{maximumFractionDigits:0});return (n<0?"-$":"$")+s}
@@ -182,7 +219,7 @@ function expWeek(){return [1,2,3,4,5,6].reduce(function(s,k){return s+num("e"+k)
 function expDay(){return expWeek()/(num("dow")||1)}
 function insDay(){return num("ins")*12/((num("wpy")||1)*(num("dow")||1))}
 function per(r){var dw=num("dow")||1,wy=num("wpy")||0,pw=r.pay/r.days*dw,fw=r.perDay*dw;function row(n,a,b){return '<tr><td>'+n+'</td><td>'+money(a)+'</td><td>'+money(b)+'</td></tr>'}
-return '<div class="sub">Over time</div><table class="per"><tr class="hd"><td>Period</td><td>Pay</td><td>Profit</td></tr>'+row("This trip ("+r.days.toFixed(1)+" days)",r.pay,r.profit)+row("Per week ("+dw+" days)",pw,fw)+row("Per month",pw*wy/12,fw*wy/12)+row("Per year ("+wy+" weeks)",pw*wy,fw*wy)+'</table><p class="hint">Weekly, monthly, and yearly figures assume every road day earns what this load does.</p>'}
+return '<div class="sub">If every day looked like this load</div><table class="per"><tr class="hd"><td>Period</td><td>Pay</td><td>Profit</td></tr>'+row("This trip ("+r.days.toFixed(1)+" days)",r.pay,r.profit)+row("Per week ("+dw+" days)",pw,fw)+row("Per month",pw*wy/12,fw*wy/12)+row("Per year ("+wy+" weeks)",pw*wy,fw*wy)+'</table><p class="warn">Not a forecast. These rows assume every road day is a load like this one, with the same rate and no extra empty miles or idle days. Real weeks, months, and years will be lower.</p>'}
 function updateExp(){var w=expWeek();$("expsum").innerHTML='<div>'+money(w)+'<small>per week</small></div><div>'+money(expDay())+'<small>per day on the road</small></div><div>'+money(w*52/12)+'<small>per month</small></div>'}
 function calc(i){
   var lm=num("lm"+i),dh=num("dh"+i),pay=num("pay"+i),oth=num("oth"+i);
@@ -203,7 +240,9 @@ function render(){updateExp();
     $("load"+i).className="load"+(r&&i===best&&count>1?" best":"");
     if(!r){v.className="verdict v-none";v.textContent="Enter miles and pay to see the result.";o.innerHTML="";return}
     var cls,txt;
-    if(r.perDay>=target){cls="v-good";txt="Worth taking. Clears your target."}
+    if(r.profit<0){cls="v-bad";txt="Skip. You'd lose money."}
+    else if(!(target>0)){cls="v-none";txt="Set a target profit ($/day) to get a verdict."}
+    else if(r.perDay>=target){cls="v-good";txt="Worth taking. Clears your target."}
     else if(r.perDay>=target*0.7){cls="v-maybe";txt="Borderline. Below your target."}
     else{cls="v-bad";txt=r.profit<0?"Skip. You'd lose money.":"Skip. Well below your target."}
     v.className="verdict "+cls;v.textContent=txt;
