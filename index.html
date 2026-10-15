@@ -95,9 +95,21 @@ button:active{transform:translateY(3px);box-shadow:0 1px 0 #111}
 #totals .tot td:last-child{font-size:22px;font-weight:800}
 footer{font-size:17px}
 .load .grid>div,.row3>div{display:flex;flex-direction:column;justify-content:flex-end}
+[data-tab][hidden]{display:none!important}
+header{padding:16px 0 14px;margin-bottom:16px}
+h1{font-size:clamp(30px,8vw,44px)}
+body:not([data-on="load"]) header p{display:none}
+.tt span{float:right;font-family:"Barlow","Segoe UI",sans-serif;font-size:18px;font-weight:700;text-transform:none;letter-spacing:0;padding-top:6px}
+input[type=date]{font-size:20px;padding-left:10px;padding-right:6px}
+body{padding-bottom:calc(92px + env(safe-area-inset-bottom,0px))}
+.tabs{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--card);border-top:4px solid var(--ink);padding-bottom:env(safe-area-inset-bottom,0px);z-index:10}
+.tabs button{flex:1;margin:0;min-height:68px;border:0;border-right:2px solid var(--ink);border-radius:0;box-shadow:none;background:var(--card);color:var(--ink);font-size:22px;padding:6px 4px}
+.tabs button:last-child{border-right:0}
+.tabs button.on{background:var(--accent);color:var(--accent-ink)}
+.tabs button:active{transform:none}
 .tcard{border:3px solid var(--ink);border-radius:6px;margin-top:14px;overflow:hidden;background:var(--card)}
 .tt{background:var(--sign);color:var(--sign-ink);font-family:"Barlow Condensed","Arial Narrow",sans-serif;font-size:28px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;padding:8px 14px}
-.tk{margin:0}.tk td{padding:10px 14px;font-size:19px;font-weight:600;text-align:left}.tk td:last-child{text-align:right;font-weight:800;font-variant-numeric:tabular-nums}
+.tk{margin:0}.tk td{padding:7px 14px;font-size:18px;font-weight:600;text-align:left}.tk td:last-child{text-align:right;font-weight:800;font-variant-numeric:tabular-nums}
 .tk tr.total td{font-size:24px;font-weight:800;background:var(--accent);color:var(--accent-ink);border-bottom:0}
 .row3{grid-template-columns:1fr}
 .row3>div,.load .grid>div,.g4>div{min-width:0}
@@ -113,7 +125,7 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 </div></header>
 
 <div class="wrap">
-  <div class="panel">
+  <div class="panel" data-tab="setup">
     <h2>Your truck costs</h2>
     <div class="grid g4">
       <div><label for="mpg">Fuel economy (MPG)</label><input id="mpg" type="number" inputmode="decimal"></div>
@@ -127,7 +139,7 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
     <p class="hint">Fixed costs means truck payment, permits, and anything else you pay whether the truck moves or not, divided by days. Insurance is spread over your road days using the weeks and days per week below. Your entries are saved on this device.</p>
   </div>
 
-  <div class="panel">
+  <div class="panel" data-tab="setup">
     <h2>Road and living expenses</h2>
     <div class="grid g4">
       <div><label for="e1">Food and meals ($/week)</label><input id="e1" type="number" inputmode="decimal"></div>
@@ -144,21 +156,21 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
     <p class="hint">Leave the box unchecked to see profit before personal expenses.</p>
   </div>
 
-  <div class="loads" id="loads"></div>
+  <div class="loads" id="loads" data-tab="load"></div>
 
-  <div class="panel" style="margin-top:22px">
+  <div class="panel" style="margin-top:22px" data-tab="totals">
     <h2>Totals</h2>
-    <p class="hint" style="margin:0 0 6px">Built from the trips and expenses you save below. Week starts Monday. Profit before living expenses is pay minus fuel, tires and repairs, fixed costs, insurance, and tolls. Your logged expenses are subtracted to get take-home.</p>
+    <p class="hint" style="margin:0 0 6px">Week starts Monday. Profit before living expenses = pay minus fuel, repairs, fixed costs, insurance, and tolls. Take-home = that minus the expenses you logged.</p>
     <div class="scroll" id="totals"></div>
   </div>
 
-  <div class="panel">
+  <div class="panel" data-tab="log">
     <h2>Saved trips</h2>
     <p class="hint" style="margin:0 0 6px">Use "Save as a trip" on a load card above. Trips are kept on this device.</p>
     <div class="scroll" id="triplist"></div>
   </div>
 
-  <div class="panel">
+  <div class="panel" data-tab="log">
     <h2>Expense log</h2>
     <div class="row3">
       <div><label for="xd">Date</label><input id="xd" type="date"></div>
@@ -171,6 +183,13 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 
   <footer>This is an estimate to help you compare loads, not financial or tax advice. It leaves out taxes, detention time, and driver pay. Always check your own numbers.</footer>
 </div>
+
+<nav class="tabs" id="tabs" aria-label="Sections">
+  <button type="button" data-go="load">Load</button>
+  <button type="button" data-go="totals">Totals</button>
+  <button type="button" data-go="log">Log</button>
+  <button type="button" data-go="setup">Setup</button>
+</nav>
 
 <script>
 var KEYS=["mpg","fuel","maint","fixed","ins","mpd","target","e1","e2","e3","e4","e5","e6","dow","wpy"];
@@ -188,10 +207,10 @@ function saveTrip(i){var r=calc(i);if(!r)return;var nm=$("nm"+i).value.trim();
   var dup=trips.some(function(t){return t.d===d&&t.n===n&&Math.round(t.miles)===Math.round(r.miles)&&Math.round(t.pay)===Math.round(r.pay)});
   if(dup&&!confirm("You already saved a trip with this date, name, miles, and pay. Save it again?"))return;
   trips.push({d:d,n:n,miles:r.miles,days:r.days,pay:r.pay,net:r.pay-r.fuel-r.maint-r.fixed-r.ins-r.oth});
-  trips.sort(function(a,b){return a.d<b.d?1:a.d>b.d?-1:0});saveLog();renderLog()}
+  trips.sort(function(a,b){return a.d<b.d?1:a.d>b.d?-1:0});saveLog();renderLog();flash("#out"+i+" button","Saved. See the Totals tab.")}
 function delTrip(k){trips.splice(k,1);saveLog();renderLog()}
 function addExp(){var a=num("xa");if(!(a>0))return;exps.push({d:$("xd").value||today(),c:$("xc").value,a:a});
-  exps.sort(function(a,b){return a.d<b.d?1:a.d>b.d?-1:0});$("xa").value="";saveLog();renderLog()}
+  exps.sort(function(a,b){return a.d<b.d?1:a.d>b.d?-1:0});$("xa").value="";saveLog();renderLog();flash(".row3 button","Saved")}
 function delExp(k){exps.splice(k,1);saveLog();renderLog()}
 function renderLog(){
   var th=trips.map(function(t,k){return '<tr><td>'+fmtShow(t.d)+'</td><td>'+esc(t.n)+' ('+Math.round(t.miles).toLocaleString("en-US")+' total mi)</td><td>'+money(t.pay)+'</td><td>'+money(t.net)+'</td><td><button type="button" class="x" onclick="delTrip('+k+')" aria-label="Remove trip">x</button></td></tr>'}).join("");
@@ -203,9 +222,12 @@ function renderLog(){
     trips.forEach(function(t){if(p[1](t.d)){n++;pay+=t.pay;net+=t.net}});
     exps.forEach(function(x){if(p[1](x.d))ex+=x.a});
     function r(l,v,c){return '<tr'+(c?' class="'+c+'"':'')+'><td>'+l+'</td><td>'+v+'</td></tr>'}
-    return '<div class="tcard"><div class="tt">'+p[0]+'</div><table class="tk">'+r("Trips",n)+r("Pay",money(pay))+r("Profit before living expenses",money(net))+r("Expenses",money(ex))+r("Take-home",money(net-ex),"total")+'</table></div>'}).join("");
+    return '<div class="tcard"><div class="tt">'+p[0]+'<span>'+n+(n===1?' trip':' trips')+'</span></div><table class="tk">'+r("Pay",money(pay))+r("Profit before living expenses",money(net))+r("Expenses",money(ex))+r("Take-home",money(net-ex),"total")+'</table></div>'}).join("");
   $("totals").innerHTML=h+'<p class="hint">Take-home is based only on the expenses you have logged. Unlogged meals and other costs are not counted.</p>'}
 function $(id){return document.getElementById(id)}
+function flash(sel,msg){var b=document.querySelector(sel);if(!b)return;var t=b.textContent;b.textContent=msg;setTimeout(function(){if(b.isConnected)b.textContent=t},2200)}
+function showTab(t){document.querySelectorAll("[data-tab]").forEach(function(e){e.hidden=e.dataset.tab!==t});document.body.dataset.on=t;document.querySelectorAll("#tabs button").forEach(function(b){b.classList.toggle("on",b.dataset.go===t)});try{localStorage.setItem("lpctab",t)}catch(e){}window.scrollTo(0,0)}
+function initTabs(){document.querySelectorAll("#tabs button").forEach(function(b){b.addEventListener("click",function(){showTab(b.dataset.go)})});var t="load";try{t=localStorage.getItem("lpctab")||"load"}catch(e){}if(!num("mpg"))t="setup";showTab(t)}
 function num(id){var v=parseFloat($(id).value);return isNaN(v)?0:v}
 function money(n){var s=Math.abs(n).toLocaleString("en-US",{maximumFractionDigits:0});return (n<0?"-$":"$")+s}
 function money2(n){return (n<0?"-$":"$")+Math.abs(n).toFixed(2)}
@@ -273,7 +295,7 @@ function save(){try{var o={};KEYS.forEach(function(k){o[k]=$(k).value});o.incl=$
 function load(){try{var o=JSON.parse(localStorage.getItem("lpc")||"null");if(o)KEYS.forEach(function(k){if(o[k]!==undefined)$(k).value=o[k]});if(o&&o.incl!==undefined)$("incl").checked=o.incl}catch(e){}}
 load();loadLog();$("xd").value=today();
 document.addEventListener("input",function(){save();render()});
-render();renderLog();
+render();renderLog();initTabs();
 </script>
 </body>
 </html>
